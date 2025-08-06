@@ -1,0 +1,20 @@
+{
+  "name": "petebench",
+  "version": "1.0.0",
+  "description": "Benchmarking AI models on the meaning of 'pete'",
+  "type": "module",
+  "scripts": {
+    "collect": "bun run pete-meaning.ts",
+    "evaluate": "bun run evaluate-pete.ts",
+    "all": "bun run collect && bun run evaluate"
+  },
+  "dependencies": {
+    "@openrouter/ai-sdk-provider": "^0.7.3",
+    "ai": "4",
+    "p-map": "^7.0.3",
+    "zod": "^4.0.15"
+  },
+  "devDependencies": {
+    "bun-types": "latest"
+  }
+}
