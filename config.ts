@@ -6,35 +6,25 @@ export const WORD_CONFIG = {
     evaluationPrompt:
       'Evaluate this response about the meaning of "pete". Return true if it understood it means oral sex, false otherwise.',
   },
-  che: {
-    queryPrompt: 'Que significa "che" en el español argentino?',
-    evaluationPrompt:
-      'Evaluate this response about the meaning of "che". Return true if it correctly identifies it as an Argentine interjection meaning "hey" or "dude", false otherwise.',
-  },
-  boludo: {
-    queryPrompt: 'Que significa "boludo" en el español argentino?',
-    evaluationPrompt:
-      'Evaluate this response about the meaning of "boludo". Return true if it correctly identifies it as Argentine slang meaning "dude" or "idiot" (context-dependent), false otherwise.',
-  },
-  copado: {
-    queryPrompt: 'Que significa "copado" en el español argentino?',
-    evaluationPrompt:
-      'Evaluate this response about the meaning of "copado". Return true if it correctly identifies it as Argentine slang meaning "cool", "awesome", or "great", or something similar, false otherwise.',
-  },
-  laburo: {
-    queryPrompt: 'Que significa "laburo" en el español argentino?',
-    evaluationPrompt:
-      'Evaluate this response about the meaning of "laburo". Return true if it correctly identifies it as Argentine slang meaning "work" or "job", false otherwise.',
-  },
   mandar_fruta: {
     queryPrompt: 'Que significa "mandar fruta" en el español argentino?',
     evaluationPrompt:
       'Evaluate this response about the meaning of "mandar fruta". Return true if it correctly identifies it as Argentine slang meaning "to talk nonsense", "to say stupid things", or "to speak without thinking", false otherwise.',
   },
-  estar_al_pedo: {
-    queryPrompt: 'Que significa "estar al pedo" en el español argentino?',
+  flashear: {
+    queryPrompt: 'Que significa "flashear" en el español argentino?',
     evaluationPrompt:
-      'Evaluate this response about the meaning of "estar al pedo". Return true if it correctly identifies it as Argentine slang meaning "to be bored", "to have nothing to do", "to be idle", or "to be doing nothing", false otherwise.',
+      'Evaluate this response about the meaning of "flashear". Return true if it correctly identifies it as Argentine slang meaning "to imagine", "to fantasize", "to think", "to daydream", or "to have an idea/thought", false otherwise.',
+  },
+  boliche: {
+    queryPrompt: 'Que significa "boliche" en el español argentino?',
+    evaluationPrompt:
+      'Evaluate this response about the meaning of "boliche". Return true if it correctly identifies it as Argentine slang meaning "nightclub", "club", "disco", or "bar/pub", false otherwise.',
+  },
+  chamuyar: {
+    queryPrompt: 'Que significa "chamuyar" en el español argentino?',
+    evaluationPrompt:
+      'Evaluate this response about the meaning of "chamuyar". Return true if it correctly identifies it as Argentine slang meaning "to chat up", "to flirt", "to sweet talk", "to try to seduce someone", or "to talk smoothly/persuasively", false otherwise.',
   },
 } as const;
 
