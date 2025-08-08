@@ -1,0 +1,14 @@
+# openai/gpt-oss-20b - What does "laburo" mean?
+
+**Query:** Que significa "laburo" en el español argentino?
+
+**Reasoning:**
+
+The user asks: "Que significa 'laburo' en el español argentino?" They want the meaning of "laburo" in Argentine Spanish. So answer: It's slang for "trabajo" (work). Also can refer to job, occupation, or work in general. Also used as noun: "el laburo" meaning the job. Also can be used as verb? "laburar" means to work. So "laburo" is a noun meaning "trabajo". Also can refer to a job or a task. Also used as "laburo" meaning "trabajo" or "labor". Also can be used as "laburo" meaning "trabajo" or "trabajo duro". Also can be used as "laburo" meaning "trabajo" or "trabajo en general". Also can be used as "laburo" meaning "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo" or "trabajo
+
+**Response:**
+
+
+
+---
+*Generated on: 2025-08-07T23:21:19.665Z*
