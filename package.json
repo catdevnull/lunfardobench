@@ -7,7 +7,8 @@
     "collect": "bun run query.ts",
     "evaluate": "bun run evaluate.ts",
     "all": "bun run query.ts pete && bun run evaluate.ts ./responses/$(date -u +%F)/pete && bun run query.ts che && bun run evaluate.ts ./responses/$(date -u +%F)/che && bun run query.ts boludo && bun run evaluate.ts ./responses/$(date -u +%F)/boludo && bun run query.ts copado && bun run evaluate.ts ./responses/$(date -u +%F)/copado && bun run query.ts laburo && bun run evaluate.ts ./responses/$(date -u +%F)/laburo",
-    "aggregate": "bun run aggregate.ts"
+    "aggregate": "bun run aggregate.ts",
+    "build:site": "bun run scripts/build-site-data.ts"
   },
   "dependencies": {
     "@openrouter/ai-sdk-provider": "^0.7.3",

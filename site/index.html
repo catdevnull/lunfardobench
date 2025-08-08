@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>LunfardoBench</title>
+	<meta name="description" content="Resultados de modelos entendiendo lunfardo argentino" />
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+	<script src="https://cdn.tailwindcss.com"></script>
+	<script>
+		tailwind.config = {
+			theme: {
+				extend: {
+					fontFamily: { sans: ["Inter", "ui-sans-serif", "system-ui", "-apple-system", "Segoe UI", "Roboto", "Noto Sans", "Ubuntu", "Cantarell", "Helvetica Neue", "Arial", "sans-serif"] },
+					colors: {
+						brand: {
+							50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 300: '#7dd3fc', 400: '#38bdf8',
+							500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1', 800: '#075985', 900: '#0c4a6e'
+						}
+					}
+				}
+			}
+		}
+	</script>
+	<style>
+		html,
+		body {
+			height: 100%;
+		}
+
+		.card-shadow {
+			box-shadow: 0 10px 30px rgba(2, 132, 199, 0.15);
+		}
+	</style>
+</head>
+
+<body class="bg-slate-50 text-slate-900">
+	<div class="min-h-screen flex flex-col">
+        <header class="sticky top-0 z-10 bg-white/80 backdrop-blur border-b border-slate-200">
+            <div class="mx-auto max-w-6xl px-4 py-3 flex items-center gap-3">
+                <div class="size-9 rounded-lg bg-brand-600 text-white grid place-items-center font-extrabold">LB</div>
+                <h1 class="text-lg font-extrabold tracking-tight">LunfardoBench</h1>
+            </div>
+        </header>
+
+		<main class="mx-auto max-w-6xl w-full px-4 py-6 flex-1">
+            <!-- Only the overview heatmap table -->
+
+			<!-- Overview Heatmap -->
+			<section class="bg-white rounded-2xl p-5 border border-slate-200 card-shadow mb-6">
+				<div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+					<h2 class="text-lg font-extrabold tracking-tight">Visión general</h2>
+					<div class="flex flex-wrap items-center gap-3 text-sm">
+						<label class="flex items-center gap-2">
+							<span class="text-slate-600">Modo</span>
+							<select id="mode" class="border border-slate-200 rounded-md px-2 py-1 bg-white">
+								<option value="snapshot">Última corrida</option>
+								<option value="aggregate">Agregado</option>
+							</select>
+						</label>
+						<label class="flex items-center gap-2">
+							<span class="text-slate-600">Orden</span>
+							<select id="sort" class="border border-slate-200 rounded-md px-2 py-1 bg-white">
+								<option value="acc">Mejor accuracy</option>
+								<option value="name">Nombre</option>
+							</select>
+						</label>
+						<label class="flex items-center gap-2">
+							<span class="text-slate-600">Mostrar</span>
+							<select id="limit" class="border border-slate-200 rounded-md px-2 py-1 bg-white">
+								<option value="10">Top 10</option>
+								<option value="15" selected>Top 15</option>
+								<option value="25">Top 25</option>
+								<option value="all">Todos</option>
+							</select>
+						</label>
+						<label class="flex items-center gap-2">
+							<input id="compact" type="checkbox" class="rounded border-slate-300" />
+							<span class="text-slate-600">Modo compacto</span>
+						</label>
+					</div>
+				</div>
+
+				<div class="flex items-center gap-4 text-xs mb-3">
+					<div class="flex items-center gap-1"><span
+							class="inline-block w-3 h-3 rounded bg-green-500"></span>Correcto</div>
+					<div class="flex items-center gap-1"><span
+							class="inline-block w-3 h-3 rounded bg-rose-500"></span>Incorrecto</div>
+					<div class="flex items-center gap-1"><span
+							class="inline-block w-3 h-3 rounded bg-amber-400"></span>Sin respuesta</div>
+					<div class="flex items-center gap-1"><span
+							class="inline-block w-3 h-3 rounded bg-slate-300"></span>Sin datos</div>
+					<div class="text-slate-500 hidden md:block">En Agregado, el color varía según accuracy por palabra
+					</div>
+				</div>
+
+				<div id="heatmap" class="overflow-auto">
+					<!-- heatmap table injected here -->
+				</div>
+            </section>
+		</main>
+        
+	</div>
+
+	<script>
+		async function loadData() {
+			const res = await fetch('./data.json');
+			const data = await res.json();
+			return data;
+		}
+
+        
+
+		function collectAllModels(words) {
+			const models = new Set();
+			for (const w of words) {
+				for (const [date, rows] of Object.entries(w.resultsByDate)) {
+					for (const r of rows) models.add(r.model);
+				}
+			}
+			return [...models];
+		}
+
+		function getLatestRowsByWord(word) {
+			if (!word.latestDate) return [];
+			return word.resultsByDate[word.latestDate] || [];
+		}
+
+		// Build status per model per word
+		function buildSnapshotMatrix(words, models) {
+			const matrix = {};
+			for (const m of models) matrix[m] = {};
+			for (const w of words) {
+				const rows = getLatestRowsByWord(w);
+				const byModel = new Map(rows.map(r => [r.model, r.status]));
+				for (const m of models) {
+					const s = byModel.get(m) || 'no-data';
+					matrix[m][w.word] = s;
+				}
+			}
+			return matrix; // { model: { word: status } }
+		}
+
+		function buildAggregateMatrix(words, models) {
+			const matrix = {};
+			for (const m of models) matrix[m] = {};
+			for (const w of words) {
+				const countsByModel = new Map(); // model -> {c,i,n}
+				for (const rows of Object.values(w.resultsByDate)) {
+					for (const r of rows) {
+						if (!countsByModel.has(r.model)) countsByModel.set(r.model, { c: 0, i: 0, n: 0 });
+						const c = countsByModel.get(r.model);
+						if (r.status === 'correct') c.c++;
+						else if (r.status === 'incorrect') c.i++;
+						else c.n++;
+					}
+				}
+				for (const m of models) {
+					const t = countsByModel.get(m);
+					if (!t) {
+						matrix[m][w.word] = null; // no data
+					} else {
+						const attempts = t.c + t.i + t.n;
+						const acc = attempts ? t.c / attempts : 0;
+						matrix[m][w.word] = acc; // 0..1
+					}
+				}
+			}
+			return matrix; // { model: { word: accuracy or null } }
+		}
+
+		function overallScoreFromSnapshot(matrix, words, model) {
+			let correct = 0;
+			for (const w of words) if (matrix[model][w.word] === 'correct') correct++;
+			return correct / words.length;
+		}
+
+		function overallScoreFromAggregate(matrix, words, model) {
+			let sum = 0;
+			for (const w of words) {
+				const v = matrix[model][w.word];
+				sum += typeof v === 'number' ? v : 0;
+			}
+			return sum / words.length;
+		}
+
+		function colorForSnapshot(status) {
+			if (status === 'correct') return 'bg-green-500';
+			if (status === 'incorrect') return 'bg-rose-500';
+			if (status === 'no-response') return 'bg-amber-400';
+			return 'bg-slate-300';
+		}
+
+		function colorForAggregate(value) {
+			if (value == null) return 'bg-slate-300';
+			// interpolate red(rose-500) -> amber-400 -> green-500 via HSL
+			const hue = value * 120; // 0=red (~0deg), 120=green
+			return `" style="background-color: hsl(${hue}, 70%, 45%)`;
+		}
+
+		function renderHeatmap(words, models, mode, sort, limit, compact) {
+			let matrix, scoreFn;
+			if (mode === 'aggregate') {
+				matrix = buildAggregateMatrix(words, models);
+				scoreFn = (m) => overallScoreFromAggregate(matrix, words, m);
+			} else {
+				matrix = buildSnapshotMatrix(words, models);
+				scoreFn = (m) => overallScoreFromSnapshot(matrix, words, m);
+			}
+
+			const sortedModels = [...models].sort((a, b) => {
+				if (sort === 'name') return a.localeCompare(b);
+				return scoreFn(b) - scoreFn(a);
+			});
+			const limitedModels = limit === 'all' ? sortedModels : sortedModels.slice(0, Number(limit));
+
+			const cellSize = compact ? 'w-4 h-4' : 'w-6 h-6';
+			const modelText = compact ? 'text-[10px]' : 'text-xs';
+			const headerText = compact ? 'text-[10px]' : 'text-xs';
+
+			const header = `
+              <thead>
+                <tr>
+                  <th class="sticky left-0 bg-white ${headerText} text-slate-500 font-medium pr-2 py-1">Modelo</th>
+                  ${words.map(w => `<th class="${headerText} text-slate-500 font-medium px-1 py-1 text-center rotate-0"><div class="[writing-mode:vertical-rl] rotate-180">${w.word}</div></th>`).join('')}
+                  <th class="${headerText} text-slate-500 font-medium pl-2 py-1 text-right">Acc.</th>
+                </tr>
+              </thead>`;
+
+			const rows = limitedModels.map(m => {
+				const cells = words.map(w => {
+					if (mode === 'aggregate') {
+						const v = matrix[m][w.word];
+						const title = v == null ? 'Sin datos' : `${Math.round((v || 0) * 100)}%`;
+						const style = colorForAggregate(v);
+						return `<td class="px-1 py-1"><div class="rounded ${cellSize}" title="${m} × ${w.word}: ${title}${v == null ? '' : ' acc.'}" ${style}></div></td>`;
+					} else {
+						const s = matrix[m][w.word];
+						const cls = colorForSnapshot(s);
+						const title = s === 'no-data' ? 'Sin datos' : s;
+						return `<td class="px-1 py-1"><div class="rounded ${cellSize} ${cls}" title="${m} × ${w.word}: ${title}"></div></td>`;
+					}
+				}).join('');
+				const acc = scoreFn(m);
+				return `<tr class="border-t border-slate-100">
+                    <td class="sticky left-0 bg-white pr-2 py-1 ${modelText} whitespace-nowrap max-w-[12rem] overflow-hidden text-ellipsis">${m}</td>
+                    ${cells}
+                    <td class="pl-2 py-1 ${modelText} text-right font-semibold">${(acc * 100).toFixed(0)}%</td>
+                </tr>`;
+			}).join('');
+
+			const table = `<table class="w-full">
+                ${header}
+                <tbody>${rows}</tbody>
+            </table>`;
+
+			document.getElementById('heatmap').innerHTML = table;
+		}
+
+		(async function init() {
+            const data = await loadData();
+            const words = data.words;
+
+			// Heatmap init
+			const modeEl = document.getElementById('mode');
+			const sortEl = document.getElementById('sort');
+			const limitEl = document.getElementById('limit');
+			const compactEl = document.getElementById('compact');
+			const allModels = collectAllModels(words);
+
+			function rerender() {
+				const mode = modeEl.value;
+				const sort = sortEl.value;
+				const limit = limitEl.value;
+				const compact = compactEl.checked;
+				renderHeatmap(words, allModels, mode, sort, limit, compact);
+			}
+			modeEl.addEventListener('change', rerender);
+			sortEl.addEventListener('change', rerender);
+			limitEl.addEventListener('change', rerender);
+			compactEl.addEventListener('change', rerender);
+
+			// URL param compact=1 to start compact for screenshots
+			const params = new URLSearchParams(location.search);
+			if (params.get('compact') === '1') {
+				compactEl.checked = true;
+			}
+			rerender();
+		})();
+	</script>
+</body>
+
+</html>
